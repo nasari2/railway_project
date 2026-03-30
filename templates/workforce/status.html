@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(to right, #fdfbfb, #ebedee);
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    .section-title {
+        margin-bottom: 20px;
+        color: #444;
+        font-weight: 600;
+    }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .task-card {
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        color: white;
+    }
+
+    .leave-card {
+        background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+        color: white;
+    }
+
+    .badge-success {
+        background: #28a745;
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+
+    .badge-warning {
+        background: #ffc107;
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+
+    .badge-danger {
+        background: #dc3545;
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+
+    .back-btn {
+        display: block;
+        width: 200px;
+        margin: 40px auto;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+        color: white;
+        text-decoration: none;
+    }
+
+    .back-btn:hover {
+        transform: translateY(-3px);
+    }
+</style>
+
+<div class="container mt-5">
+
+    <h2 class="title">📊 My Tasks & Leaves Status</h2>
+
+    <!-- TASKS -->
+    <div class="mb-5">
+        <h3 class="section-title">📋 Tasks</h3>
+
+        {% if tasks %}
+        <div class="row">
+            {% for task in tasks %}
+            <div class="col-md-4 mb-3">
+                <div class="card task-card p-3">
+
+                    <h5>{{ task.title }}</h5>
+
+                    <p>
+                        Status:
+                        {% if task.status == "Completed" %}
+                            <span class="badge-success">Completed</span>
+                        {% else %}
+                            <span class="badge-warning">Pending</span>
+                        {% endif %}
+                    </p>
+
+                    <p>Date: {{ task.date }}</p>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No tasks assigned</p>
+        {% endif %}
+    </div>
+
+    <!-- LEAVES -->
+    <div class="mb-5">
+        <h3 class="section-title">📝 Leaves</h3>
+
+        {% if leaves %}
+        <div class="row">
+            {% for leave in leaves %}
+            <div class="col-md-4 mb-3">
+                <div class="card leave-card p-3">
+
+                    <p><b>{{ leave.from_date }} → {{ leave.to_date }}</b></p>
+                    <p>{{ leave.reason }}</p>
+
+                    <p>
+                        Status:
+                        {% if leave.status == "Approved" %}
+                            <span class="badge-success">Approved</span>
+                        {% elif leave.status == "Pending" %}
+                            <span class="badge-warning">Pending</span>
+                        {% else %}
+                            <span class="badge-danger">Rejected</span>
+                        {% endif %}
+                    </p>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No leaves applied</p>
+        {% endif %}
+    </div>
+
+    <!-- BACK BUTTON -->
+    <a href="{% url 'worker_dashboard' %}" class="back-btn">
+        ⬅ Back to Dashboard
+    </a>
+
+</div>
+
+{% endblock %}

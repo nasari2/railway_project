@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Header Section -->
+ 
+<div class="jumbotron jumbotron-fluid page-header" style="margin-bottom: 50px;">
+    <div class="jumbotron jumbotron-fluid text-white"
+     style="margin-bottom:50px;
+     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+     url('{% static "img/carousel-1.jpg" %}') center/cover no-repeat;">
+    <div class="container text-center py-5">
+        <h1 class="text-white display-4">Admin Dashboard</h1>
+        <p class="text-white">Manage Workers, Tasks & Leaves</p>
+        <!-- Logout Button -->
+    <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
+</div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Stats Cards -->
+    <div class="row text-center mb-5">
+
+       <div class="col-md-2 mb-3">
+    <a href="{% url 'worker_list' %}" style="text-decoration: none;">
+        <div class="card bg-primary text-white p-3 text-center">
+            <h6>Total Workers</h6>
+            <h3>{{ total_workers }}</h3>
+        </div>
+    </a>
+</div>
+
+        <div class="col-md-2 mb-3">
+    <a href="{% url 'task_list' %}" style="text-decoration: none;">
+        <div class="card bg-info text-white p-3 text-center">
+            <h6>Total Tasks</h6>
+            <h3>{{ total_tasks }}</h3>
+        </div>
+    </a>
+</div>
+
+       <div class="col-md-2 mb-3">
+    <a href="{% url 'completed_task_list' %}" style="text-decoration: none;">
+        <div class="card bg-success text-white p-3 text-center">
+            <h6>Completed</h6>
+            <h3>{{ completed_tasks }}</h3>
+        </div>
+    </a>
+</div>
+
+       <div class="col-md-2 mb-3">
+    <a href="{% url 'pending_task_list' %}" style="text-decoration: none;">
+        <div class="card bg-warning text-white p-3 text-center">
+            <h6>Pending</h6>
+            <h3>{{ pending_tasks }}</h3>
+        </div>
+    </a>
+</div>
+<div class="col-md-2 mb-3">
+    <a href="{% url 'all_leaves_list' %}" style="text-decoration: none;">
+        <div class="card bg-secondary text-white p-3 text-center">
+            <h6>Total Leaves</h6>
+            <h3>{{ total_leaves }}</h3>
+        </div>
+    </a>
+</div>
+
+        <div class="col-md-2 mb-3">
+    <a href="{% url 'pending_leaves_list' %}" style="text-decoration: none;">
+        <div class="card bg-danger text-white p-3 text-center">
+            <h6>Pending Leaves</h6>
+            <h3>{{ pending_leaves }}</h3>
+        </div>
+    </a>
+</div>
+    </div>
+
+    <!-- Assign Task -->
+    <div class="card p-4 mb-5">
+        <h4>Assign Task</h4>
+        <form method="POST" action="{% url 'assign_task' %}">
+            {% csrf_token %}
+            <div class="row">
+
+                <div class="col-md-4 mb-2">
+                    <select class="form-control" name="worker">
+                        <option>Select Worker</option>
+                        {% for worker in workers %}
+                        <option value="{{ worker.id }}">{{ worker.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <input type="text" class="form-control" name="title" placeholder="Task Title">
+                </div>
+
+                <!-- <div class="col-md-2 mb-2">
+                    <select class="form-control" name="status">
+                        <option>Pending</option>
+                        <option>Completed</option>
+                    </select>
+                </div> -->
+
+                <div class="col-md-2 mb-2">
+                    <button class="btn btn-primary w-100">Assign</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <!-- Pending Leaves -->
+    <div class="mb-5">
+        <h4>Pending Leaves</h4>
+        <div class="row">
+            {% for leave in pending_leaves_list %}
+            <div class="col-md-4 mb-3">
+                <div class="card p-3">
+
+                    <h5>{{ leave.user.username }}</h5>
+                  <p>{{ leave.from_date }} - {{ leave.to_date }}</p>
+                   <p>{{ leave.reason }}</p>
+                   <span class="badge badge-warning">{{ leave.status|capfirst }}</span>   
+
+                    <div class="mt-2">
+                        <a href="{% url 'approve_leave' leave.id %}" class="btn btn-success btn-sm">Approve</a>
+                        <a href="{% url 'reject_leave' leave.id %}" class="btn btn-danger btn-sm">Reject</a>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="mb-5">
+        <h4>All Tasks</h4>
+        <div class="row">
+
+            {% for task in tasks %}
+            <div class="col-md-4 mb-3">
+                <div class="card p-3">
+
+                   <h5>{{ task.user.username }}</h5>
+<p>{{ task.title }}</p>
+<span class="badge {% if task.status == 'Completed' %}badge-success{% else %}badge-warning{% endif %}">
+    {{ task.status }}
+</span>
+
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

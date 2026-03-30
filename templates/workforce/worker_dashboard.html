@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(to right, #fdfbfb, #ebedee);
+    }
+
+    /* Navbar */
+    .topbar {
+        background: #4e73df;
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+
+    .topbar h4 {
+        margin: 0;
+    }
+
+    /* Cards */
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .task-card {
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        color: white;
+    }
+
+    .leave-card {
+        background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+        color: white;
+    }
+
+    .badge-success { background: #28a745; padding: 5px 10px; border-radius: 10px; }
+    .badge-warning { background: #ffc107; padding: 5px 10px; border-radius: 10px; }
+    .badge-danger { background: #dc3545; padding: 5px 10px; border-radius: 10px; }
+
+    /* Buttons */
+    .action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+        color: white;
+        text-decoration: none;
+        width: 200px;
+        height: 110px;
+        border-radius: 15px;
+        margin: 10px;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- 🔥 TOP NAVBAR -->
+    <div class="topbar">
+        <h4>👋 Welcome {{ request.user.username }}</h4>
+
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="btn btn-danger btn-sm">Logout</button>
+        </form>
+    </div>
+
+    <!-- TASKS -->
+    <h3 class="mb-3">📋 My Tasks</h3>
+
+    {% if tasks %}
+    <div class="row">
+        {% for task in tasks %}
+        <div class="col-md-4 mb-3">
+            <div class="card task-card p-3">
+
+                <h5>{{ task.title }}</h5>
+
+                <p>
+                    Status:
+                    {% if task.status == "Completed" %}
+                        <span class="badge-success">Completed</span>
+                    {% else %}
+                        <span class="badge-warning">Pending</span>
+                    {% endif %}
+                </p>
+
+                <p>Date: {{ task.date }}</p>
+
+                {% if task.status != "Completed" %}
+                <a href="{% url 'complete_task' task.id %}" class="btn btn-light btn-sm">
+                    ✔ Mark Completed
+                </a>
+                {% endif %}
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No tasks assigned yet.</p>
+    {% endif %}
+
+    <!-- LEAVES -->
+    <div class="mb-5">
+    <h3 class="section-title">📝 My Leaves</h3>
+
+    {% if leaves %}
+    <div class="row">
+        {% for leave in leaves %}
+        <div class="col-md-4 mb-3">
+            <div class="card p-3 leave-card">
+
+                <p><b>{{ leave.from_date }} → {{ leave.to_date }}</b></p>
+                <p>{{ leave.reason }}</p>
+
+                <p>
+                    Status:
+                    {% if leave.status == "approved" %}
+                        <span class="badge-success">Approved ✅</span>
+                    {% elif leave.status == "pending" %}
+                        <span class="badge-warning">Pending ⏳</span>
+                    {% elif leave.status == "rejected" %}
+                        <span class="badge-danger">Rejected ❌</span>
+                    {% endif %}
+                </p>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No leave requests.</p>
+    {% endif %}
+</div>
+
+    <!-- ACTION BUTTONS -->
+   <!-- ACTION SECTION -->
+<div class="mt-5">
+
+    <h3 class="mt-5 mb-3">⚡ Quick Actions</h3>
+
+    <div class="row ">
+
+        <!-- Apply Leave -->
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'apply_leave' %}" class="action-btn w-100">
+                <div class="icon">📝</div>
+                <div class="text">Apply Leave</div>
+            </a>
+        </div>
+
+        <!-- Check Status -->
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'worker_status' %}" class="action-btn w-100">
+                <div class="icon">📊</div>
+                <div class="text">Check Status</div>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

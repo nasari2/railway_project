@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>👋 Welcome Worker</h2>
+
+<!-- My Tasks -->
+<div id="my-tasks" class="card">
+    <h3>📋 My Tasks</h3>
+    {% for task in tasks %}
+        <p><b>{{ task.title }}</b> - {{ task.status }}</p>
+    {% empty %}
+        <p>No tasks assigned</p>
+    {% endfor %}
+</div>
+
+<!-- Apply Leave -->
+<div class="card">
+    <h3>📅 Apply Leave</h3>
+    <a href="{% url 'apply_leave' %}" class="button">Apply Leave</a>
+</div>
+<a href="{% url 'worker_status' %}" class="button">Check task and leave status</a>
+
+<!-- Status -->
+<div class="card">
+    <h3>📊 Status</h3>
+    <a href="{% url 'worker_status' %}" class="button">Check task and leave status</a>
+</div>
+
+    <h4>Tasks</h4>
+    {% for task in tasks %}
+        <p><b>{{ task.title }}</b> - {{ task.status }}</p>
+    {% empty %}
+        <p>No tasks assigned</p>
+    {% endfor %}
+
+    <h4>Leaves</h4>
+    {% for leave in leaves %}
+        <p><b>{{ leave.from_date }} - {{ leave.to_date }}</b> | {{ leave.status }}</p>
+    {% empty %}
+        <p>No leaves applied</p>
+    {% endfor %}
+</div>
+
+<!-- Button to jump to Status -->
+<a href="#status" class="button">Check task and leave status</a>
+
+{% endblock %}

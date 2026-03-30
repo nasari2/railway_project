@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📅 Apply Leave</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <label>From Date:</label>
+    <input type="date" name="from_date" required><br><br>
+
+    <label>To Date:</label>
+    <input type="date" name="to_date" required><br><br>
+
+    <label>Reason:</label><br>
+    <textarea name="reason"></textarea><br><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+<a href="{% url 'worker_dashboard' %}">Back to Dashboard</a>
+{% endblock %}

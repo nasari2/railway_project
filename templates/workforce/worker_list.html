@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>All Workers</h3>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Address</th>
+                <th>Job</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for worker in workers %}
+            <tr>
+                <td>{{ worker.id }}</td>
+                <td>{{ worker.username }}</td>
+                <td>{{ worker.email }}</td>
+                <td>{{ worker.role }}</td>
+                <td>{{ worker.address}}</td>
+                <td>{{ worker.job_title}}</td>
+                <td>{{ worker.phone_number}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
