@@ -135,6 +135,20 @@ The **Railway Management System** is a fully functional web application develope
 ## 📸 Screenshots
 
 ### Dashboard Views
+
+
+
+
+<h3>🔹 Admin Home Page</h3>
+<p>
+  <img src="Screenshot%202026-03-31%105217.png" width="300"><br>
+  <b>Dashboard</b>
+</p>
+
+
+
+
+
 ![Dashboard](Screenshots/105217.png)
 ![Worker List](Screenshots/105239.png)
 ![Task Assignment](Screenshots/105303.png)
